@@ -114,6 +114,8 @@ RUN useradd -m -s /bin/bash -G users databot
 WORKDIR /home/databot
 ENV HOME="/home/databot"
 
+RUN chmod 755 /home/databot
+
 USER databot
 
 # Pacify datalad
@@ -125,7 +127,8 @@ ENV PATH="${CONDA_PATH}/bin:$PATH" \
     CPATH="${CONDA_PATH}/include:$CPATH" \
     LD_LIBRARY_PATH="${CONDA_PATH}/lib:$LD_LIBRARY_PATH"
 
-RUN mkdir $HOME/data $HOME/outputs \
+RUN mkdir $HOME/data $HOME/outputs $HOME/.local \
+    && chmod 1777 $HOME/.local \
     && datalad clone https://github.com/OpenNeuroDatasets/ds000005 $HOME/data/ds000005 \
     && datalad get -d $HOME/data/ds000005 $HOME/data/ds000005/sub-01/anat/sub-01_T1w.nii.gz
 
